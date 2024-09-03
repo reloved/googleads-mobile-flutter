@@ -101,13 +101,15 @@
 - (void)onAppEvent:(id<FLTAd> _Nonnull)ad
               name:(NSString *)name
               data:(NSString *)data {
-  [_channel invokeMethod:@"onAdEvent"
-               arguments:@{
-                 @"adId" : ad.adId,
-                 @"eventName" : @"onAppEvent",
-                 @"name" : name,
-                 @"data" : data
-               }];
+    NSMutableDictionary *arguments = [[NSMutableDictionary alloc] initWithDictionary:@{
+        @"adId" : ad.adId,
+        @"eventName" : @"onAppEvent",
+        @"name" : name,
+    }];
+    if(data) {
+        arguments[@"data"] = data;
+    }
+  [_channel invokeMethod:@"onAdEvent" arguments:arguments];
 }
 
 - (void)onNativeAdImpression:(FLTNativeAd *_Nonnull)ad {
